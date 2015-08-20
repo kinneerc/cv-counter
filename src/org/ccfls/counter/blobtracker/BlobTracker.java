@@ -9,6 +9,8 @@ public class BlobTracker {
     // stores the history for the requested amount of time
     ArrayList<Blob> history;
 
+    ArrayList<Zone> zones;
+
     /**
      * Given a list of locations, get list of labeled blobs
      */
@@ -95,8 +97,14 @@ public class BlobTracker {
           // for now, just make it a new blob
           // later, we can find what lock was not matched, and find the 
           // closest blob.  We can then transfer properties if desired
+          System.out.println("Looking to add blobs");
           for (Location l : leftoverLocks){
-            bloblist.add(new Blob(l));
+              // only assign a new blob if in a gateway zone
+              System.out.println("Considering a leftover lock");
+              if(inGate(l)){
+                System.out.println("Got lock in gate");
+                bloblist.add(new Blob(l));
+              }
           }
 
         }
@@ -110,6 +118,23 @@ public class BlobTracker {
         history = (ArrayList<Blob>) bloblist.clone();
 
         return bloblist;
+    }
+
+    private boolean inGate(Location l){
+        for (Zone z : zones){
+            System.out.println("Considering zone "+z.id);
+            if (z.gateway && z.location.contains(l.center()))
+                return true;
+        } 
+        return false;
+    }
+
+    public void setZones(ArrayList<Zone> input){
+        zones = input;
+    }
+
+    public boolean zoned(){
+        return zones != null;
     }
 
     /* protected List<Blob> checkCollisions(Location l){ */

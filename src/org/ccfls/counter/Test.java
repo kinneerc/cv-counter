@@ -1,6 +1,7 @@
 package org.ccfls.counter;
 
 //imports
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
+import java.util.Scanner;
 
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -65,6 +67,73 @@ myThread.runnable = false;
     {
     protected volatile boolean runnable = false;
 
+    // given a single frame, allow the user to select gateway zones
+    private ArrayList<Zone> pickZones(Mat frame) throws IOException {
+
+        ArrayList<Zone> zoneList = new ArrayList<Zone>();
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Entering zone control mode.\nThe user will select gateway zones.");
+
+        showMat(frame);
+
+        boolean happy = false;
+
+        while (!happy){
+            System.out.print("Enter top left x:");
+            double tlx = scan.nextDouble();
+            System.out.print("Enter top left y:");
+            double tly = scan.nextDouble();
+            System.out.print("Enter bottom right x:");
+            double brx = scan.nextDouble();
+            System.out.print("Enter bottom right y:");
+            double bry = scan.nextDouble();
+
+            System.out.print("Confirm zone location (y/n):");
+            // 
+            Mat preview = new Mat();
+            frame.copyTo(preview);
+            Point tl = new Point(tlx,tly);
+            Point br = new Point(brx,bry);
+
+            Imgproc.rectangle(preview,tl,br,new Scalar(0, 0, 255));
+
+            showMat(preview);
+
+            if(scan.next().equals("y")){
+                // create the zone
+                System.out.print("Outer gateway? (incoming? y/n):");
+                boolean outer = scan.next().equals("y");
+
+                zoneList.add(new Zone(new Location(tl.x,tl.y,br.x,br.y),outer));
+                preview.copyTo(frame);
+
+            }
+
+            System.out.print("Done entering zones? (y/n):");
+            if(scan.next().equals("y")){
+                happy = true;
+            }
+
+
+        }
+        
+        return zoneList;
+
+    }
+
+    private boolean showMat(Mat frame) throws IOException {
+        Imgcodecs.imencode(".bmp", frame, mem);
+		Image im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
+
+			    BufferedImage buff = (BufferedImage) im;
+			    Graphics g=jPanel1.getGraphics();
+
+			    return g.drawImage(buff, 0, 0, getWidth(), getHeight() -150 , 0, 0, buff.getWidth(), buff.getHeight(), null);
+
+    }
+
     @Override
     public  void run()
     {
@@ -76,14 +145,15 @@ myThread.runnable = false;
                 {
 		    	try
                         {
-                            Mat show = processFrame(webSource);
-			    Imgcodecs.imencode(".bmp", show, mem);
-			    Image im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
 
-			    BufferedImage buff = (BufferedImage) im;
-			    Graphics g=jPanel1.getGraphics();
+                if(!blobTracker.zoned()){
+                    webSource.retrieve(frame);
+                    blobTracker.setZones(pickZones(frame));
+                }
 
-			    if (g.drawImage(buff, 0, 0, getWidth(), getHeight() -150 , 0, 0, buff.getWidth(), buff.getHeight(), null))
+                Mat show = processFrame(webSource);
+
+			    if (showMat(show))
 			    
 			    if(runnable == false)
                             {

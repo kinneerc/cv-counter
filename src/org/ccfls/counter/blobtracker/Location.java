@@ -14,6 +14,14 @@ public class Location {
         this.bry = bry;
     }
 
+    public boolean contains(double[] xy){
+        double x = xy[0];
+        double y = xy[1];
+        System.out.println("Checking "+x+" "+y+" in "+tlx+" "+brx+ " "+tly+" "+bry);
+        //TODO AHA! y coords in zone are revsered!
+        return x >= tlx && x <= brx && y <= tly && y >= bry;
+    }
+
     public double[] center(){
         double[] answer = new double[2];
         answer[0] = (tlx + brx)/2;

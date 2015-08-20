@@ -11,6 +11,9 @@ public class Blob {
 
     int id;
 
+    boolean incoming;
+    boolean outgoing;
+
     public Blob(Location l){
         initial = l;
         current = l;
