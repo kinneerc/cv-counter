@@ -26,4 +26,19 @@ public class Match implements Comparable<Match> {
         return blob;
     }
 
+    @Override
+    public boolean equals(Object o){
+        boolean same = false;
+
+        if (o != null){
+        if (o instanceof Match){
+            Match mo = (Match) o;
+            same = mo.location.equals(location);
+        }
+        }
+
+        return same;
+
+    }
+
 }

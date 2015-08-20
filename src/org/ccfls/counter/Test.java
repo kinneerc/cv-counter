@@ -8,12 +8,15 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
+
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 import org.opencv.imgproc.Imgproc;
+
+import org.ccfls.counter.blobtracker.*;
 
 public class Test extends javax.swing.JFrame {
 
@@ -31,6 +34,8 @@ public class Test extends javax.swing.JFrame {
     MatOfByte mem = new MatOfByte();
 
     BackgroundSubtractorMOG2 bsub =  Video.createBackgroundSubtractorMOG2(500,400,false); 
+
+    BlobTracker blobTracker = new BlobTracker();
 
     private void jButton1ActionPerformed(ActionEvent evt){
 ////////////////////////////////////////////////////////////
@@ -88,6 +93,7 @@ myThread.runnable = false;
 			 }
 			 catch(Exception ex)
                          {
+                             ex.printStackTrace();
 			    System.out.println("Error");
                          }
                 }
@@ -101,19 +107,35 @@ myThread.runnable = false;
         vc.retrieve(frame);
         bsub.apply(frame,fgMask);
 
+        //TODO look into improving preprocessing using the cinema example
         Imgproc.GaussianBlur(fgMask,fgMask,new Size(0,0),10);
 
         ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         // and now do feature detection!
         Imgproc.findContours(fgMask,contours,new Mat(),Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
 
+        // store locations of rects for blobtracker
+        ArrayList<Location> locks = new ArrayList<Location>();
+
         for (MatOfPoint ct : contours){
             Rect bounds = Imgproc.boundingRect(ct);
+
+
+            locks.add(new Location(bounds.tl().x,bounds.tl().y,bounds.br().x,bounds.br().y));
 
             Imgproc.rectangle(frame,bounds.tl(),bounds.br(),new Scalar(0, 0, 255));
 
 
         }
+
+        // run blobtracker on the locations
+        ArrayList<Blob> blobs = blobTracker.track(locks);
+
+        // label the blobs on the image
+        for (Blob b : blobs){
+            Imgproc.putText(frame,b.getId()+"",new Point(b.getCurrent().brx,b.getCurrent().bry),Core.FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255));
+        }
+        
         /* Mat out = new Mat(); */
         /* System.out.println(Imgproc.connectedComponents(fgMask,out)); */
 

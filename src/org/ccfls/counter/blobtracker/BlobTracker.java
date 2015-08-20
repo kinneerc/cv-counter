@@ -13,7 +13,13 @@ public class BlobTracker {
      * Given a list of locations, get list of labeled blobs
      */
     public ArrayList<Blob> track(ArrayList<Location> locks){
+
         ArrayList<Blob> bloblist = new ArrayList<Blob>();
+
+        if(locks==null){
+            history = null;
+            return bloblist;
+        }
 
         // check for initialization case
         // simply make all locks blobs
@@ -59,18 +65,21 @@ public class BlobTracker {
                 while(taken.contains(pq.peek())){
                     pq.poll();
                 }
-                if (best == null || best.score < pq.poll().score){
+                if (best == null || best.score < pq.peek().score){
                     best = pq.poll();
                     bestindex = count;
                 }
 
             }
 
-
+            if (best!=null){
             leftoverBlobs.remove(best.blob);
             leftoverLocks.remove(best.location);
             taken.add(best);
             qlist.remove(bestindex);
+            }else{
+            break;
+            }
 
         }
 
@@ -97,16 +106,19 @@ public class BlobTracker {
             bloblist.add(m.take());
         }
 
+        // and override history
+        history = (ArrayList<Blob>) bloblist.clone();
+
         return bloblist;
     }
 
-    protected List<Blob> checkCollisions(Location l){
-        ArrayList<Blob> bloblist = new ArrayList<Blob>();
-        for (Blob b : history){
-            if (b.current.collidesWith(l))
-                bloblist.add(b);
-        }
-        return bloblist;
-    }
+    /* protected List<Blob> checkCollisions(Location l){ */
+    /*     ArrayList<Blob> bloblist = new ArrayList<Blob>(); */
+    /*     for (Blob b : history){ */
+    /*         if (b.current.collidesWith(l)) */
+    /*             bloblist.add(b); */
+    /*     } */
+    /*     return bloblist; */
+    /* } */
 
 }
