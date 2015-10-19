@@ -33,8 +33,18 @@ public class BlobTracker {
         // simply make all locks blobs
         if (history == null){
             history = new ArrayList<Blob>();
-            for (Location l : locks)
-                history.add(new Blob(l));
+            for (Location l : locks){
+              Zone z = null;
+              if((z = inZone(l)) != null){
+                  Blob blob = new Blob(l);
+                  if (z.outer)
+                      blob.incoming = true;
+                  else
+                      blob.outgoing = true;
+
+                history.add(blob);
+            }
+            }
 
             return (ArrayList<Blob>) history.clone();
         }
