@@ -203,7 +203,15 @@ myThread.runnable = false;
 
         // label the blobs on the image
         for (Blob b : blobs){
-            Imgproc.putText(frame,b.getId()+"",new Point(b.getCurrent().brx,b.getCurrent().bry),Core.FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255));
+
+            // label direction
+            String dir = "-";
+            if (b.incoming())
+                dir += "I";
+            if(b.outgoing())
+                dir += "O";
+
+            Imgproc.putText(frame,b.getId()+dir,new Point(b.getCurrent().brx,b.getCurrent().bry),Core.FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255));
         }
         
         /* Mat out = new Mat(); */

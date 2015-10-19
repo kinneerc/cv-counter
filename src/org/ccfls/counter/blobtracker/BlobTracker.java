@@ -6,6 +6,12 @@ import java.util.PriorityQueue;
 
 public class BlobTracker {
 
+    private boolean debug = false;
+
+    public static int exits = 0;
+
+    public static int enters = 0;
+
     // stores the history for the requested amount of time
     ArrayList<Blob> history;
 
@@ -97,13 +103,23 @@ public class BlobTracker {
           // for now, just make it a new blob
           // later, we can find what lock was not matched, and find the 
           // closest blob.  We can then transfer properties if desired
+          if(debug)
           System.out.println("Looking to add blobs");
           for (Location l : leftoverLocks){
-              // only assign a new blob if in a gateway zone
+              // only add new blob if inside of a zone
+              if(debug)
               System.out.println("Considering a leftover lock");
-              if(inGate(l)){
-                System.out.println("Got lock in gate");
+              Zone z = null;
+              if((z = inZone(l)) != null){
+                  Blob blob = new Blob(l);
+                  if (z.outer)
+                      blob.incoming = true;
+                  else
+                      blob.outgoing = true;
+                if(debug)
+                System.out.println("Got lock in zone");
                 bloblist.add(new Blob(l));
+              }else{
               }
           }
 
@@ -112,6 +128,15 @@ public class BlobTracker {
         // now add in matches to bloblist
         for (Match m : taken){
             bloblist.add(m.take());
+            // now check to see if we have entered a zone
+            Zone z = inZone(m.location);
+
+        if(z != null){
+            // deal with the zone
+            m.take(z);
+        }
+
+
         }
 
         // and override history
@@ -120,13 +145,17 @@ public class BlobTracker {
         return bloblist;
     }
 
-    private boolean inGate(Location l){
+    protected Zone inZone(Location l){
+
         for (Zone z : zones){
+            if(debug)
             System.out.println("Considering zone "+z.id);
-            if (z.gateway && z.location.contains(l.center()))
-                return true;
+            if (z.location.contains(l.center()))
+                return z;
         } 
-        return false;
+        return null;
+
+    
     }
 
     public void setZones(ArrayList<Zone> input){
