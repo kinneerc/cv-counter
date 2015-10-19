@@ -18,8 +18,7 @@ public class Location {
         double x = xy[0];
         double y = xy[1];
         System.out.println("Checking "+x+" "+y+" in "+tlx+" "+brx+ " "+tly+" "+bry);
-        //TODO AHA! y coords in zone are revsered!
-        return x >= tlx && x <= brx && y <= tly && y >= bry;
+        return x >= tlx && x <= brx && y >= tly && y <= bry;
     }
 
     public double[] center(){
