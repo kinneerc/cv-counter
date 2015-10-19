@@ -128,7 +128,7 @@ public class BlobTracker {
                       blob.outgoing = true;
                 if(debug)
                 System.out.println("Got lock in zone");
-                bloblist.add(new Blob(l));
+                bloblist.add(blob);
               }else{
               }
           }

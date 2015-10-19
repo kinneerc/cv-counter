@@ -17,7 +17,7 @@ public class Location {
     public boolean contains(double[] xy){
         double x = xy[0];
         double y = xy[1];
-        System.out.println("Checking "+x+" "+y+" in "+tlx+" "+brx+ " "+tly+" "+bry);
+        /* System.out.println("Checking "+x+" "+y+" in "+tlx+" "+brx+ " "+tly+" "+bry); */
         return x >= tlx && x <= brx && y >= tly && y <= bry;
     }
 
