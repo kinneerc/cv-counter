@@ -1,15 +1,13 @@
 package org.ccfls.counter;
 
 //imports
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
-import java.util.Scanner;
 
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -26,6 +24,8 @@ public class CVFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
 
+    private String zoneFile = "zones.csv";
+
     private DaemonThread myThread = null;
     int count = 0;
     VideoCapture webSource = null;
@@ -38,6 +38,28 @@ public class CVFrame extends javax.swing.JFrame {
     BackgroundSubtractorMOG2 bsub =  Video.createBackgroundSubtractorMOG2(500,400,false); 
 
     BlobTracker blobTracker = new BlobTracker();
+
+    private ArrayList<Zone> readZones(File zoneFile){
+
+        ArrayList<Zone> ans = new ArrayList<Zone>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(zoneFile))){
+            String line = "";
+		while ((line = br.readLine()) != null) {
+
+		        // use comma as separator
+			String[] data = line.split(",");
+
+			ans.add(new Zone(data));
+
+		}
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        
+        return ans;
+
+    }
 
     private void jButton1ActionPerformed(ActionEvent evt){
 ////////////////////////////////////////////////////////////
@@ -69,6 +91,17 @@ myThread.runnable = false;
 
     // given a single frame, allow the user to select gateway zones
     private ArrayList<Zone> pickZones(Mat frame) throws IOException {
+
+        // first we'll try to read zones from the file
+        File zones = new File(zoneFile);
+
+        // if the file exists, simply read in the zones
+        if (zones.exists()){
+            return readZones(zones);
+        }
+
+        // otherwise, we'll have to get this from the user
+        // we'll then save it to a file for next time
 
         ArrayList<Zone> zoneList = new ArrayList<Zone>();
 
@@ -117,6 +150,15 @@ myThread.runnable = false;
             }
 
 
+        }
+
+        // write the zoneList to a file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(zones))){
+            writer.write(Zone.toCSV(zoneList));
+            writer.flush();
+            writer.close();
+        }catch(IOException e){
+            e.printStackTrace();
         }
         
         return zoneList;
