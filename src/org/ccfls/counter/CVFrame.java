@@ -42,7 +42,7 @@ public class CVFrame extends javax.swing.JFrame {
 
     BackgroundSubtractorMOG2 bsub =  Video.createBackgroundSubtractorMOG2(500,400,false); 
 
-    BlobTracker blobTracker = new BlobTracker();
+    BlobTracker blobTracker;
 
     private ArrayList<Zone> readZones(File zoneFile){
 
@@ -274,6 +274,7 @@ myThread.runnable = false;
         initComponents();
         try{
         pc = new PeopleCounter(place);
+        blobTracker = new BlobTracker(pc);
         }catch(SQLException e){
             e.printStackTrace();
         }
