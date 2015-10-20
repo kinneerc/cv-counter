@@ -34,6 +34,7 @@ public class Match implements Comparable<Match> {
                 blob.incoming = true;
                 BlobTracker.exits += 1;
                 System.out.println("EXIT");
+                BlobTracker.trigger("EXIT");
             }
         }else{
             if (blob.incoming){
@@ -41,6 +42,7 @@ public class Match implements Comparable<Match> {
                 blob.outgoing = true;
                 BlobTracker.enters += 1;
                 System.out.println("ENTER");
+                BlobTracker.trigger("ENTER");
             }
         }
     }

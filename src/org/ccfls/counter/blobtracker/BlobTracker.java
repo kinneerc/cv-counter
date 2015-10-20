@@ -1,5 +1,6 @@
 package org.ccfls.counter.blobtracker;
 
+import org.ccfls.counter.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -12,10 +13,21 @@ public class BlobTracker {
 
     public static int enters = 0;
 
+    // people counter object that we will trigger
+    private static PeopleCounter pc;
+
     // stores the history for the requested amount of time
     ArrayList<Blob> history;
 
     ArrayList<Zone> zones;
+
+    public BlobTracker(PeopleCounter pc){
+        BlobTracker.pc = pc;
+    }
+
+    public static void trigger(String type){
+        pc.trigger(type);
+    }
 
     /**
      * Given a list of locations, get list of labeled blobs

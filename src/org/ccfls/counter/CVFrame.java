@@ -1,6 +1,7 @@
 package org.ccfls.counter;
 
 //imports
+import java.sql.SQLException;
 import java.io.*;
 import java.util.*;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,10 @@ public class CVFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
 
     private String zoneFile = "zones.csv";
+
+    // this class handles reporting to database
+    // as well as raspberry pi interactions
+    private PeopleCounter pc;
 
     private DaemonThread myThread = null;
     int count = 0;
@@ -216,6 +221,9 @@ myThread.runnable = false;
    /////////////////////////////////////////////////////////
 
     public Mat processFrame(VideoCapture vc){
+
+        pc.idc.heartbeat();
+
         vc.retrieve(frame);
         bsub.apply(frame,fgMask);
 
@@ -262,8 +270,13 @@ myThread.runnable = false;
         return frame;
     }
 
-    public CVFrame(){
+    public CVFrame(String place){
         initComponents();
+        try{
+        pc = new PeopleCounter(place);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -335,7 +348,7 @@ myThread.runnable = false;
            System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // load native library of opencv
            java.awt.EventQueue.invokeLater(new Runnable(){
             public void run(){
-                new CVFrame().setVisible(true);
+                new CVFrame(args[0]).setVisible(true);
             }
            });
 }
