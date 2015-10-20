@@ -26,6 +26,7 @@ public class Match implements Comparable<Match> {
         return blob;
     }
 
+    // TODO refactor this to blobtracker
     // change state of the blob based on zone
     protected void take(Zone z){
         if (z.outer){

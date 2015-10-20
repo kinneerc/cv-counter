@@ -44,10 +44,10 @@ public class Zone {
      */
     public String toCSVRow(){
         String ans = Integer.toString(id)+",";
-        ans += location.tlx+",";
-        ans += location.tly+",";
-        ans += location.brx+",";
-        ans += location.bry+",";
+        ans += ((int) location.tlx)+",";
+        ans += ((int) location.tly)+",";
+        ans += ((int) location.brx)+",";
+        ans += ((int) location.bry)+",";
         if (gateway)
             ans += "1,";
         else
