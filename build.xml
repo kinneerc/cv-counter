@@ -4,11 +4,16 @@
 
     <property name="ocvLibDir"   value="/home/pi/Downloads/opencv-3.0.0/build/lib"/>
 
+    <property name="pi4jLibDir"  value="/opt/pi4j/lib/"/>
+
+    <property name="pi4j.dir"    value="${pi4jLibDir}"/>
+ 
     <property name="src.dir"     value="src"/>
 
     <property name="lib.dir"     value="${ocvJarDir}"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${pi4j.dir}" includes="**/*.jar"/>
     </path>
 
     <property name="build.dir"   value="build"/>
