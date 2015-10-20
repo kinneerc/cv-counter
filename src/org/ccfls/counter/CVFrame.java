@@ -20,7 +20,7 @@ import org.opencv.imgproc.Imgproc;
 
 import org.ccfls.counter.blobtracker.*;
 
-public class Test extends javax.swing.JFrame {
+public class CVFrame extends javax.swing.JFrame {
 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -220,7 +220,7 @@ myThread.runnable = false;
         return frame;
     }
 
-    public Test(){
+    public CVFrame(){
         initComponents();
     }
 
@@ -293,7 +293,7 @@ myThread.runnable = false;
            System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // load native library of opencv
            java.awt.EventQueue.invokeLater(new Runnable(){
             public void run(){
-                new Test().setVisible(true);
+                new CVFrame().setVisible(true);
             }
            });
 }
