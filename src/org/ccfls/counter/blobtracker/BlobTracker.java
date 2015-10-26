@@ -9,12 +9,12 @@ public class BlobTracker {
 
     private boolean debug = false;
 
-    public static int exits = 0;
+    public int exits = 0;
 
-    public static int enters = 0;
+    public int enters = 0;
 
     // people counter object that we will trigger
-    private static PeopleCounter pc;
+    private PeopleCounter pc;
 
     // stores the history for the requested amount of time
     ArrayList<Blob> history;
@@ -22,10 +22,10 @@ public class BlobTracker {
     ArrayList<Zone> zones;
 
     public BlobTracker(PeopleCounter pc){
-        BlobTracker.pc = pc;
+        this.pc = pc;
     }
 
-    public static void trigger(String type){
+    public void trigger(String type){
         pc.trigger(type);
     }
 
@@ -155,7 +155,7 @@ public class BlobTracker {
 
         if(z != null){
             // deal with the zone
-            m.take(z);
+            take(m,z);
         }
 
 
@@ -165,6 +165,37 @@ public class BlobTracker {
         history = (ArrayList<Blob>) bloblist.clone();
 
         return bloblist;
+    }
+
+        // TODO refactor this to blobtracker
+    // change state of the blob based on zone
+    protected void take(Match m, Zone z){
+
+        Blob blob = m.blob;
+
+        if (z.outer){
+            if (blob.outgoing){
+                blob.outgoing = false;
+                blob.incoming = true;
+
+                exits += 1;
+
+                System.out.println("EXIT");
+
+                trigger("EXIT");
+            }
+        }else{
+            if (blob.incoming){
+                blob.incoming = false;
+                blob.outgoing = true;
+
+                enters += 1;
+
+                System.out.println("ENTER");
+
+                trigger("ENTER");
+            }
+        }
     }
 
     protected Zone inZone(Location l){

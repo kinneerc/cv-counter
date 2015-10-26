@@ -26,28 +26,6 @@ public class Match implements Comparable<Match> {
         return blob;
     }
 
-    // TODO refactor this to blobtracker
-    // change state of the blob based on zone
-    protected void take(Zone z){
-        if (z.outer){
-            if (blob.outgoing){
-                blob.outgoing = false;
-                blob.incoming = true;
-                BlobTracker.exits += 1;
-                System.out.println("EXIT");
-                BlobTracker.trigger("EXIT");
-            }
-        }else{
-            if (blob.incoming){
-                blob.incoming = false;
-                blob.outgoing = true;
-                BlobTracker.enters += 1;
-                System.out.println("ENTER");
-                BlobTracker.trigger("ENTER");
-            }
-        }
-    }
-
     @Override
     public boolean equals(Object o){
         boolean same = false;
