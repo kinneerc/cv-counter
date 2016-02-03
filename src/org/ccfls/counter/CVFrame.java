@@ -44,7 +44,7 @@ public class CVFrame extends javax.swing.JFrame {
 
     BlobTracker blobTracker;
 
-    private ArrayList<Zone> readZones(File zoneFile){
+    protected static ArrayList<Zone> readZones(File zoneFile){
 
         ArrayList<Zone> ans = new ArrayList<Zone>();
 
@@ -270,8 +270,20 @@ myThread.runnable = false;
         return frame;
     }
 
-    public CVFrame(String place){
+    public CVFrame(String place, boolean forceRezone){
         initComponents();
+
+        if (forceRezone){
+
+         // first we'll try to read zones from the file
+        File zones = new File(zoneFile);
+
+        // if the file exists, then delete it
+        if (zones.exists()){
+            zones.delete();
+        }
+        }
+
         try{
         pc = new PeopleCounter(place);
         blobTracker = new BlobTracker(pc);
@@ -347,10 +359,27 @@ myThread.runnable = false;
    // add this line to main method
   public static void main(String[] args){ 
            System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // load native library of opencv
+
+            if (args[1].equals("true")){
+
            java.awt.EventQueue.invokeLater(new Runnable(){
+               
+
             public void run(){
-                new CVFrame(args[0]).setVisible(true);
+                new CVFrame(args[0],true).setVisible(true);
             }
            });
+            }else{
+
+                java.awt.EventQueue.invokeLater(new Runnable(){
+               
+
+            public void run(){
+                new CVFrame(args[0],false).setVisible(true);
+            }
+           });
+
+            
+            }
 }
 }

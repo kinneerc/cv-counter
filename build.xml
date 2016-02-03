@@ -14,6 +14,7 @@
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
         <fileset dir="${pi4j.dir}" includes="**/*.jar"/>
+        <fileset dir="lib" includes="**/*.jar"/>
     </path>
 
     <property name="build.dir"   value="build"/>
