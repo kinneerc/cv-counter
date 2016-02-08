@@ -65,6 +65,7 @@ public class PeopleCounter {
 	String connectAddr = "jdbc:mysql://"+dbServIp+":"+dbServPort+"/"+dbServName+"?autoReconnect=true";
         conn = DriverManager.getConnection(connectAddr,dbServUser,dbServPw);
 
+
     }
 
 

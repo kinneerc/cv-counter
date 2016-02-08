@@ -31,9 +31,10 @@ public class CVCounter {
     @Parameter(names = {"-f","--file"}, description = "Path to csv defining the entry and exit zones")    
     protected String zoneFile = "zones.csv";
 
-
     @Parameter(names = {"-h","--help"}, description = "Show command line arguments", help = true)
     protected boolean help;
+
+    private JCommander jc;
 
     private BlobTracker blobTracker;
 
@@ -45,16 +46,21 @@ public class CVCounter {
     private VideoCapture webSource = null;
 
     public static void main(String[] args){
-        CVCounter counter = new CVCounter();
-        new JCommander(counter,args);
+        CVCounter counter = new CVCounter(args);
+        counter.jc = new JCommander(counter,args);
         
         counter.run();
     }
 
-    public CVCounter(){
+    public CVCounter(String[] args){
     }
 
     private void run(){
+
+        if (help){
+            jc.usage();
+            System.exit(0);
+        }
 
         // is this a run to set the zones?
         if (zone){
