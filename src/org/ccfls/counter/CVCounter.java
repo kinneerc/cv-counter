@@ -105,6 +105,11 @@ public class CVCounter {
         // now we configure the blobtracker
         blobTracker.setZones(zones);
 
+        if(!blobTracker.zoned()){
+                        System.out.println("No Zone File found. Must provide one or create a new one with the -z argument");
+                        System.exit(1);
+                    }
+
         // turn the webcam on
 
         VideoCapture webSource = new VideoCapture(0);
@@ -116,14 +121,8 @@ public class CVCounter {
         while(true){
             if (webSource.grab()){
                 try{
-
-                    if(!blobTracker.zoned()){
-                        System.out.println("No Zone File found. Must provide one or create a new one with the -z argument");
-                        System.exit(1);
-                    }
-
+                    
                     processFrame(webSource,bsub);
-
 
                 }
                 catch(Exception ex)
@@ -170,18 +169,20 @@ public class CVCounter {
         // run blobtracker on the locations
         ArrayList<Blob> blobs = blobTracker.track(locks);
 
-        // label the blobs on the image
-        for (Blob b : blobs){
+        // headless mode, we don't need to modify the frame for output / debugging
 
-            // label direction
-            String dir = "-";
-            if (b.incoming())
-                dir += "I";
-            if(b.outgoing())
-                dir += "O";
-
-            Imgproc.putText(frame,b.getId()+dir,new Point(b.getCurrent().brx,b.getCurrent().bry),Core.FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255));
-        }
+        /* // label the blobs on the image */
+        /* for (Blob b : blobs){ */
+        /*  */
+        /*     // label direction */
+        /*     String dir = "-"; */
+        /*     if (b.incoming()) */
+        /*         dir += "I"; */
+        /*     if(b.outgoing()) */
+        /*         dir += "O"; */
+        /*  */
+        /*     Imgproc.putText(frame,b.getId()+dir,new Point(b.getCurrent().brx,b.getCurrent().bry),Core.FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255)); */
+        /* } */
         
         /* Mat out = new Mat(); */
         /* System.out.println(Imgproc.connectedComponents(fgMask,out)); */
