@@ -14,6 +14,4 @@ sudo modprobe bcm2835-v4l2
 opencvlib='/home/pi/Downloads/opencv-3.0.0/build/lib'
 classpath='build/classes:lib/*:/opt/pi4j/lib/*:.'
 
-echo sudo java -Djava.library.path="$opencvlib" -cp "$classpath" org.ccfls.counter.CVCounter -p childrens
-
 sudo java -Djava.library.path="$opencvlib" -cp "$classpath" org.ccfls.counter.CVCounter -p childrens
