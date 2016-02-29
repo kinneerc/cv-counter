@@ -66,13 +66,11 @@ public class CVCounter {
         if (zone){
             // if so, use the CVFrame to do this
             CVFrame.main(new String[] {site, "true"});
-            System.exit(0);
         }
 
         // next, do we want headless run?
         if (visual){
             CVFrame.main(new String[] {site,"false"});
-            System.exit(0);
         }else{
             try{
                 runHeadless();
