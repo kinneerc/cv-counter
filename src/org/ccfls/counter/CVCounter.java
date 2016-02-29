@@ -126,40 +126,59 @@ public class CVCounter {
 
         // enter main loop
 
-        while(true){
-            if (webSource.grab()){
-                try{
-                    
-                    processFrame(webSource,bsub);
-
-                }
-                catch(Exception ex)
-                {
-                    ex.printStackTrace();
-                    System.out.println("Error");
-                }
-
-            }
-        }
-    }
-    
-    public Mat processFrame(VideoCapture vc,BackgroundSubtractorMOG2 bsub){
 
         Mat frame = new Mat();
         Mat fgMask = new Mat();
 
+        while(true){
+            /* System.out.println("Enter main loop"); */
+            if (webSource.grab()){
+                /* System.out.println("grabbed a frame"); */
+                try{
+                    
+                    /* System.out.println("start proc frame"); */
+                    processFrame(webSource,bsub,frame,fgMask);
+                    /* System.out.println("end proc frame"); */
+
+                }
+                catch(Exception ex)
+                {
+                    /* System.out.println("!!!!!!!!!!!!caught excption!!!!!!!!!"); */
+                    ex.printStackTrace();
+                    System.out.println("Error");
+                }
+
+            }else{
+            /* System.out.println("woops, missed a frame"); */
+            }
+        }
+    }
+    
+    public Mat processFrame(VideoCapture vc,BackgroundSubtractorMOG2 bsub,Mat frame, Mat fgMask){
+
+        
+        /* System.out.println("Doing heartbeat"); */
+
         pc.idc.heartbeat();
 
+        /* System.out.println("Getting frame"); */
+
         vc.retrieve(frame);
+
+        /* System.out.println("Applying bsub"); */
         bsub.apply(frame,fgMask);
 
+        /* System.out.println("Applying blur"); */
         //TODO look into improving preprocessing using the cinema example
         Imgproc.GaussianBlur(fgMask,fgMask,new Size(0,0),10);
 
+        /* System.out.println("Getting contours"); */
         ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         // and now do feature detection!
         Imgproc.findContours(fgMask,contours,new Mat(),Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
 
+
+        /* System.out.println("Get rects from contours"); */
         // store locations of rects for blobtracker
         ArrayList<Location> locks = new ArrayList<Location>();
 
@@ -174,6 +193,7 @@ public class CVCounter {
 
         }
 
+        /* System.out.println("Running blobtracker"); */
         // run blobtracker on the locations
         ArrayList<Blob> blobs = blobTracker.track(locks);
 
@@ -194,6 +214,8 @@ public class CVCounter {
         
         /* Mat out = new Mat(); */
         /* System.out.println(Imgproc.connectedComponents(fgMask,out)); */
+
+        /* System.out.println("returning the frame"); */
 
         return frame;
     }
