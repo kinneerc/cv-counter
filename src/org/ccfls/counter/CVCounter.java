@@ -83,6 +83,10 @@ public class CVCounter {
 
     public void runHeadless() throws SQLException {
 
+        // we need to load the opencv library from the system
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // load native library of opencv
+
+
         // and the peoplecounter
         pc = new PeopleCounter(site);
         // instantiate tracker
