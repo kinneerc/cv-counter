@@ -1,9 +1,18 @@
 #!/bin/bash
 
+# get some important directories
+opencvlib='/home/pi/Downloads/opencv-3.0.0/build/lib'
+progdir='/home/pi/dev/cv-counter'
+classpath="$progdir/build/classes:$progdir/lib/*:/opt/pi4j/lib/*:$progdir/."
+
+# the program assumes its being run from its root dir
+# so we must go to the programs dir
+cd $progdir
+
 # allow any users on the localhost to use our xsession
 # this is needed for letting root open the gui window
 # (if you will be using the gui option)
-xhost +localhost
+#xhost +localhost
 
 # this kernal module is for the pi's camera
 # it should already be installed with raspbian
@@ -11,7 +20,4 @@ xhost +localhost
 sudo modprobe bcm2835-v4l2
 
 # and now we start the program
-opencvlib='/home/pi/Downloads/opencv-3.0.0/build/lib'
-classpath='build/classes:lib/*:/opt/pi4j/lib/*:.'
-
 sudo java -Djava.library.path="$opencvlib" -cp "$classpath" org.ccfls.counter.CVCounter -p childrens
