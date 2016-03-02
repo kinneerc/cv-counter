@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# go to the repo directory
+cd /home/pi/dev/cv-counter
+
+# pull the latest and greatest
+git pull origin master
+
+# compile the new version
+ant compile
+
+# now kill restart the program
+sudo pkill java
+./start.sh
