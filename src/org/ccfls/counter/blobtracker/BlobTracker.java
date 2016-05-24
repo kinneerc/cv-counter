@@ -26,7 +26,10 @@ public class BlobTracker {
     }
 
     public void trigger(String type){
-        pc.trigger(type);
+	switch (type){
+	case "ENTER": pc.trigger("1"); break;
+	case "EXIT": pc.trigger("0"); break;
+	}
     }
 
     /**

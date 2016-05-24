@@ -24,10 +24,12 @@ public class PeopleCounter {
 
     private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private String place;
+    private String place, library;
 
-    public PeopleCounter(String place) throws SQLException {
+    public PeopleCounter(String place, String library) throws SQLException {
+
         this.place = place;
+	this.library = library;
 
 	// read in the database info from config file
 	try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -130,7 +132,7 @@ public class PeopleCounter {
                 lastTrigger = System.currentTimeMillis();
                 idc.count();
                 Statement stmt = conn.createStatement();
-                stmt.executeUpdate("INSERT INTO AllCounts VALUES("+"NOW()"+",\""+place+"\")");
+                stmt.executeUpdate("INSERT INTO AllCounts VALUES("+"NOW()"+",\""+place+"\",\""+library+"\",\""+type+"\")");
                 // if all of that worked, then all is well
                 idc.error.allIsWell();
             }catch(SQLException e){
