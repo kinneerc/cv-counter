@@ -47,6 +47,7 @@ public class PeopleCounter {
 				default: System.out.println("Unrecognized config option: "+ct[0]);
     			}
 		}
+	}
 
         setupDatabase();
         idc = new Indicators();
