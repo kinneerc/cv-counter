@@ -25,6 +25,9 @@ public class CVCounter {
     @Parameter(names = {"-p","--place","--site"}, description = "The location of this unit.", required = true)
     protected String site;
 
+     @Parameter(names = {"-l","--library","--lib"}, description = "The library of this unit.", required = true)
+    protected String library;
+
     @Parameter(names = {"-z","--zone"}, description = "Redefine entry and exit zones by visual window")    
     protected boolean zone = false;
 
@@ -65,12 +68,12 @@ public class CVCounter {
         // is this a run to set the zones?
         if (zone){
             // if so, use the CVFrame to do this
-            CVFrame.main(new String[] {site, "true"});
+            CVFrame.main(new String[] {site, "true",library});
         }
 
         // next, do we want headless run?
         if (visual){
-            CVFrame.main(new String[] {site,"false"});
+            CVFrame.main(new String[] {site,"false",library});
         }else{
             try{
                 runHeadless();
@@ -88,7 +91,7 @@ public class CVCounter {
 
 
         // and the peoplecounter
-        pc = new PeopleCounter(site);
+        pc = new PeopleCounter(site,library);
         // instantiate tracker
         blobTracker = new BlobTracker(pc);
  

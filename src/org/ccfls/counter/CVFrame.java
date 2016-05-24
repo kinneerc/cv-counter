@@ -270,7 +270,7 @@ myThread.runnable = false;
         return frame;
     }
 
-    public CVFrame(String place, boolean forceRezone){
+    public CVFrame(String place, String library, boolean forceRezone){
         initComponents();
 
         if (forceRezone){
@@ -285,7 +285,7 @@ myThread.runnable = false;
         }
 
         try{
-        pc = new PeopleCounter(place);
+        pc = new PeopleCounter(place,library);
         blobTracker = new BlobTracker(pc);
         }catch(SQLException e){
             e.printStackTrace();
@@ -366,7 +366,7 @@ myThread.runnable = false;
                
 
             public void run(){
-                new CVFrame(args[0],true).setVisible(true);
+                new CVFrame(args[0],true,args[2]).setVisible(true);
             }
            });
             }else{
@@ -375,7 +375,7 @@ myThread.runnable = false;
                
 
             public void run(){
-                new CVFrame(args[0],false).setVisible(true);
+                new CVFrame(args[0],false,args[2]).setVisible(true);
             }
            });
 
