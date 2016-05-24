@@ -25,6 +25,11 @@ A computer vision people counter for Raspberry Pi.
 3. Download and compile the Java version of OpenCV.
 4. Clone the cv-counter repo to the Raspberry Pi.
 5. Modify the start and nightly\_build scripts to point to the correct names and directories.
-6. Add cron jobs to run these scrips, see the install.md file for an example.
+6. Configure the PeopleCounter.java class to point to the correct MySQL server address and password.
+7. Add cron jobs to run these scrips, see the install.md file for an example.
+8. Recommended, configure sshd and vncserver for remote maintenance.
+9. Install the unit with the camera pointing towards where people will walk in and out.
+10. Run CVCounter in visual mode to configure entry and exit zones.
+11. Restart the Raspberry Pi.
 ### Server
 To be continued...
