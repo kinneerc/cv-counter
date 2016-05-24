@@ -270,7 +270,7 @@ myThread.runnable = false;
         return frame;
     }
 
-    public CVFrame(String place, String library, boolean forceRezone){
+    public CVFrame(String place, boolean forceRezone, String library){
         initComponents();
 
         if (forceRezone){

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.io.IOException;
+import java.io.*;
 
 public class PeopleCounter {
     private GpioController gpio;
@@ -90,12 +91,12 @@ public class PeopleCounter {
     }
 
     public static void main(String[] args) throws InterruptedException, SQLException {
-        if(args.length != 1){
-            System.out.println("Need to give Place as an arg");
+        if(args.length != 2){
+            System.out.println("Need to give Place and Library as args");
             return;
         }
 
-        PeopleCounter pc = new PeopleCounter(args[0]);
+        PeopleCounter pc = new PeopleCounter(args[0],args[1]);
         while(true){
             pc.idc.heartbeat();
             Thread.sleep(500);
