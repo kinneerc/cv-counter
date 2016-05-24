@@ -20,4 +20,4 @@ cd $progdir
 sudo modprobe bcm2835-v4l2
 
 # and now we start the program
-sudo java -Djava.library.path="$opencvlib" -cp "$classpath" org.ccfls.counter.CVCounter -p childrens
+sudo java -Djava.library.path="$opencvlib" -cp "$classpath" org.ccfls.counter.CVCounter -p childrens -l MPL
