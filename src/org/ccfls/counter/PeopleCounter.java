@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.io.*;
 
 public class PeopleCounter {
+
+    // path to the database login info file
+    private final String file = "config.csv";
+
     private GpioController gpio;
     private GpioPinDigitalInput pc;
     protected Indicators idc;
