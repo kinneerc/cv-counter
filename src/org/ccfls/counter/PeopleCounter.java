@@ -134,7 +134,6 @@ public class PeopleCounter {
         return System.currentTimeMillis() - lastTrigger;
     }
 
-    // TODO add type to database
     public void trigger(String type){
 
         if (timeSince() > interval){
@@ -147,8 +146,8 @@ public class PeopleCounter {
                 idc.error.allIsWell();
             }catch(SQLException e){
                 e.printStackTrace();
-                // houston, we have a problem
-                // first, we'll check network accessability
+                // Houston, we have a problem
+                // first, we'll check network accessibility
                 if(!dbServReachable()){
                     // if the database is not reachable, it seems we 
                     // have a network problem

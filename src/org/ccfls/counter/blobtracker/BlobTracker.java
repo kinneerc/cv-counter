@@ -170,7 +170,6 @@ public class BlobTracker {
         return bloblist;
     }
 
-        // TODO refactor this to blobtracker
     // change state of the blob based on zone
     protected void take(Match m, Zone z){
 
