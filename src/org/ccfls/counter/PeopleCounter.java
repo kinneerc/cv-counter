@@ -136,7 +136,7 @@ public class PeopleCounter {
 
     public void trigger(String type){
 
-        if (timeSince() > interval){
+        if (true || timeSince() > interval){
             try{
                 lastTrigger = System.currentTimeMillis();
                 idc.count();
