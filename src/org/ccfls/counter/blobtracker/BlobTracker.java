@@ -4,7 +4,6 @@ import org.ccfls.counter.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.lang.Math;
 
 public class BlobTracker {
 
@@ -31,23 +30,6 @@ public class BlobTracker {
 	case "ENTER": pc.trigger("1"); break;
 	case "EXIT": pc.trigger("0"); break;
 	}
-    }
-
-    public boolean acceptable(Match best){
-    
-	    double distance = best.blob.diff(best.location);
-
-	    double xs = Math.abs(best.blob.current.tlx - best.blob.current.brx);
-
-	    double ys = Math.abs(best.blob.current.tly - best.blob.current.bry);
-
-	    double smallest = xs < ys ? xs : ys;
-
-	    if (distance <= smallest)
-		    return true;
-	    else
-		    return false;
-
     }
 
     /**
@@ -123,7 +105,7 @@ public class BlobTracker {
 
             }
 
-            if (best!=null && acceptable(best)){
+            if (best!=null){
             leftoverBlobs.remove(best.blob);
             leftoverLocks.remove(best.location);
             taken.add(best);
